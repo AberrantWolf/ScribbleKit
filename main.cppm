@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <iostream>
 
-#include "GraphicsApiInterface.h"
+import GraphicsApiInterface;
 
 void error_callback(int error, const char* description)
 {
@@ -51,7 +51,8 @@ int main()
     printf("Api interface created\n");
 
     try {
-        pInterface->Init(window, "shaders");
+        const auto assets_path = std::string("shaders");
+        pInterface->Init(window, assets_path);
     } catch (const std::exception& e) {
         std::cout << "Error initializing graphics api: " << e.what() << std::endl;
         return -3;
