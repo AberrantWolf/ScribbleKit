@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 FetchContent_Declare(
         DirectX-Headers
         GIT_REPOSITORY https://github.com/microsoft/DirectX-Headers
@@ -35,13 +37,14 @@ add_library(MathLib INTERFACE)
 target_include_directories(MathLib INTERFACE ${mathlib_SOURCE_DIR})
 
 add_executable(ScribbleKit
-    main.cppm
-    PlatformIncludes.h
+        main.cppm
+#        PlatformIncludes.h
 )
 
 target_sources(ScribbleKit
-    PUBLIC
+        PUBLIC
         FILE_SET all_modules TYPE CXX_MODULES FILES
+        app/App.ixx
         utils/utils.ixx
         utils/utils-result.ixx
         graphics/types.ixx

@@ -22,7 +22,4 @@ namespace scribble {
 
         virtual void Destroy() = 0;
     };
-
-
-    export extern GraphicsApiInterface *MakeGraphicsApi();
 }

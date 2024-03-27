@@ -37,7 +37,7 @@ void ThrowIfFailed(T value) {
     ThrowIfFailed(value, "Unspecified failure");
 }
 
-namespace scribble {
+namespace scribble::dx12 {
     export class InterfaceDX12 : public GraphicsApiInterface {
     public:
         void Init(GLFWwindow *p_window, const std::string &assets_path) override {
@@ -769,7 +769,7 @@ namespace scribble {
         GLFWwindow *mp_window{};
     };
 
-    export GraphicsApiInterface *MakeGraphicsApi() {
-        return new InterfaceDX12();
+    export std::unique_ptr<GraphicsApiInterface> MakeGraphicsApi() {
+        return std::make_unique<InterfaceDX12>();
     }
 } // scribble
