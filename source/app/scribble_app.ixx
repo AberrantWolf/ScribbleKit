@@ -5,9 +5,10 @@ module;
 
 #include <GLFW/glfw3.h>
 #include <cstdio>
-#include <iostream>
 
-export module scribble.App;
+#include "fmt/ostream.h"
+
+export module scribble.app;
 
 import scribble.graphics;
 
@@ -18,7 +19,7 @@ namespace scribble {
 
         static auto error_callback(int error, const char* description) -> void
         {
-            fprintf(stderr, "Error: %s\n", description);
+            fmt::println(stderr, "Error: {}", description);
         }
 
         static auto key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) -> void
@@ -28,11 +29,12 @@ namespace scribble {
         }
 
     public:
+        // TODO: Better name or something
         enum class Result {
-            Success = 0,
-            InitializationFailed,
-            WindowCreationFailed,
-            InitializeGraphicsApiFailed,
+            success = 0,
+            initialization_failed,
+            window_creation_failed,
+            initialize_graphics_api_failed,
         };
 
         auto set_graphics(std::unique_ptr<graphics_interface>&& graphics) -> void {
@@ -42,7 +44,7 @@ namespace scribble {
 
         auto run() -> Result {
             if (!glfwInit()) {
-                return Result::InitializationFailed;
+                return Result::initialization_failed;
             }
 
             glfwSetErrorCallback(error_callback);
@@ -51,17 +53,16 @@ namespace scribble {
             p_window_ = glfwCreateWindow(720, 480, "Hi There", nullptr, nullptr);
             if (!p_window_)
             {
-                return Result::WindowCreationFailed;
+                return Result::window_creation_failed;
             }
             glfwSetKeyCallback(p_window_, key_callback);
-
 
             try {
                 const auto assets_path = std::string("shaders");
                 graphics_->init(p_window_, assets_path);
             } catch (const std::exception& e) {
-                std::cout << "Error initializing graphics api: " << e.what() << std::endl;
-                return Result::InitializeGraphicsApiFailed;
+                fmt::println("Error initializing graphics api: {}", e.what());
+                return Result::initialize_graphics_api_failed;
             }
 
             while (!glfwWindowShouldClose(p_window_))
@@ -77,7 +78,7 @@ namespace scribble {
             glfwDestroyWindow(p_window_);
             glfwTerminate();
 
-            return Result::Success;
+            return Result::success;
         }
     };
 }

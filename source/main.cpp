@@ -4,11 +4,10 @@
 
 #include <iostream>
 
-#include <fmt/core.h>
 #include <fmt/ostream.h>
 
 import scribble.graphics.dx12;
-import scribble.App;
+import scribble.app;
 
 int main()
 {
@@ -19,7 +18,7 @@ int main()
     app.set_graphics(std::move(graphics_interface));
 
     const auto exit_result = app.run();
-    if (exit_result != scribble::scribble_app::Result::Success) {
+    if (exit_result != scribble::scribble_app::Result::success) {
         fmt::print(std::cerr, "Did not exit correctly");
     }
 

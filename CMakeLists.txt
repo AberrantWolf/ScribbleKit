@@ -64,19 +64,24 @@ add_executable(ScribbleKit
 set_property(TARGET ScribbleKit PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # C++ modules are relegated to here, where they goddamn belong
+set(ScribbleKit_Modules
+    source/app/scribble_app.ixx
+    source/utils/utils.ixx
+    source/utils/utils-result.ixx
+    source/space/space.ixx
+    source/space/graph/graph.ixx
+    source/space/graph/node.ixx
+    source/graphics/types.ixx
+    source/graphics/interface.ixx
+    source/graphics/dx12/interface.ixx
+)
 target_sources(ScribbleKit
     PUBLIC
     FILE_SET all_modules TYPE CXX_MODULES FILES
-    # source/scribble/types.ixx
-    source/app/App.ixx
-    source/utils/utils.ixx
-    source/utils/utils-result.ixx
-    source/graph/graph.ixx
-    source/graph/node.ixx
-    source/graphics/types.ixx
-    source/GraphicsApiInterface.ixx
-    source/DX12/InterfaceDX12.ixx
+    ${ScribbleKit_Modules}
 )
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/source" FILES ${ScribbleKit_Modules})
 
 # Make sure to link everything, too
 target_link_libraries(ScribbleKit DirectX-Headers MathLib d3dcompiler d3d12 dxgi dxguid gdi32 fmt glfw)
