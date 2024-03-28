@@ -6,7 +6,7 @@ module;
 
 #include <MathLib.h>
 
-export module types;
+export module scribble.types;
 
 namespace scribble {
     export struct double2 {

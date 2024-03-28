@@ -1,5 +1,5 @@
 //
-// Created by lareo on 5/1/2023.
+// Created by Scott Harper on 5/1/2023.
 //
 
 #ifndef SCRIBBLEKIT_PLATFORMINCLUDES_H

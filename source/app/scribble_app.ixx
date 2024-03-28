@@ -1,5 +1,5 @@
 //
-// Created by lareo on 2024 March 27.
+// Created by Scott Harper on 2024 March 27.
 //
 module;
 
@@ -7,14 +7,14 @@ module;
 #include <cstdio>
 #include <iostream>
 
-export module App;
+export module scribble.App;
 
-import GraphicsApiInterface;
+import scribble.graphics;
 
 namespace scribble {
-    export class App {
-        std::unique_ptr<GraphicsApiInterface> m_graphics;
-        GLFWwindow* m_pwindow = nullptr;
+    export class scribble_app {
+        std::unique_ptr<graphics_interface> graphics_{};
+        GLFWwindow* p_window_ = nullptr;
 
         static auto error_callback(int error, const char* description) -> void
         {
@@ -35,9 +35,9 @@ namespace scribble {
             InitializeGraphicsApiFailed,
         };
 
-        auto set_graphics(std::unique_ptr<GraphicsApiInterface>&& graphics) -> void {
+        auto set_graphics(std::unique_ptr<graphics_interface>&& graphics) -> void {
             // TODO: If the graphics was already like... doing stuff, we maybe should uh... transfer the stuff?
-            m_graphics = std::move(graphics);
+            graphics_ = std::move(graphics);
         }
 
         auto run() -> Result {
@@ -48,33 +48,33 @@ namespace scribble {
             glfwSetErrorCallback(error_callback);
 
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-            m_pwindow = glfwCreateWindow(720, 480, "Hi There", nullptr, nullptr);
-            if (!m_pwindow)
+            p_window_ = glfwCreateWindow(720, 480, "Hi There", nullptr, nullptr);
+            if (!p_window_)
             {
                 return Result::WindowCreationFailed;
             }
-            glfwSetKeyCallback(m_pwindow, key_callback);
+            glfwSetKeyCallback(p_window_, key_callback);
 
 
             try {
                 const auto assets_path = std::string("shaders");
-                m_graphics->Init(m_pwindow, assets_path);
+                graphics_->init(p_window_, assets_path);
             } catch (const std::exception& e) {
                 std::cout << "Error initializing graphics api: " << e.what() << std::endl;
                 return Result::InitializeGraphicsApiFailed;
             }
 
-            while (!glfwWindowShouldClose(m_pwindow))
+            while (!glfwWindowShouldClose(p_window_))
             {
                 // Keep running
                 glfwPollEvents();
 
-                m_graphics->Update();
-                m_graphics->Render();
+                graphics_->update();
+                graphics_->render();
             }
 
-            m_graphics->Destroy();
-            glfwDestroyWindow(m_pwindow);
+            graphics_->destroy();
+            glfwDestroyWindow(p_window_);
             glfwTerminate();
 
             return Result::Success;

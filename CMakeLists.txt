@@ -18,6 +18,13 @@ FetchContent_Declare(
 )
 
 #------------------------------------------------
+# fmt
+FetchContent_Declare(fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG master
+)
+
+#------------------------------------------------
 # GLFW
 FetchContent_Declare(
     GLFW
@@ -41,7 +48,7 @@ endif ()
 
 #------------------------------------------------
 # Make available if needed
-FetchContent_MakeAvailable(DirectX-Headers GLFW)
+FetchContent_MakeAvailable(DirectX-Headers fmt GLFW)
 
 #------------------------------------------------
 # Workaround because MathLib is header-only
@@ -51,20 +58,25 @@ target_include_directories(MathLib INTERFACE ${mathlib_SOURCE_DIR})
 #------------------------------------------------
 # Scribble Kit!!!
 add_executable(ScribbleKit
-    main.cppm
+    source/main.cpp
 )
+
+set_property(TARGET ScribbleKit PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # C++ modules are relegated to here, where they goddamn belong
 target_sources(ScribbleKit
     PUBLIC
     FILE_SET all_modules TYPE CXX_MODULES FILES
-    app/App.ixx
-    utils/utils.ixx
-    utils/utils-result.ixx
-    graphics/types.ixx
-    GraphicsApiInterface.ixx
-    DX12/InterfaceDX12.ixx
+    # source/scribble/types.ixx
+    source/app/App.ixx
+    source/utils/utils.ixx
+    source/utils/utils-result.ixx
+    source/graph/graph.ixx
+    source/graph/node.ixx
+    source/graphics/types.ixx
+    source/GraphicsApiInterface.ixx
+    source/DX12/InterfaceDX12.ixx
 )
 
 # Make sure to link everything, too
-target_link_libraries(ScribbleKit DirectX-Headers MathLib d3dcompiler d3d12 dxgi dxguid gdi32 glfw)
+target_link_libraries(ScribbleKit DirectX-Headers MathLib d3dcompiler d3d12 dxgi dxguid gdi32 fmt glfw)
